@@ -1,6 +1,6 @@
 import 'package:crypto_bloc/bloc/crypto_bloc.dart';
 import 'package:crypto_bloc/bloc/crypto_event.dart';
-import 'package:crypto_bloc/cubit/crypto_cubit.dart';
+// import 'package:crypto_bloc/cubit/crypto_cubit.dart';
 import 'package:crypto_bloc/bloc/crypto_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +36,18 @@ class CryptoPage extends StatelessWidget {
                       context.read<CryptoBloc>().add(FilterGainers());
                     },
                     child: Text('Рост'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<CryptoBloc>().add(FilterDrop());
+                    },
+                    child: Text('Падение'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<CryptoBloc>().add(Top10());
+                    },
+                    child: Text('Топ-10'),
                   ),
                   ElevatedButton(
                     onPressed: () {

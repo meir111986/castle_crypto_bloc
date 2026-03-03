@@ -1,4 +1,5 @@
 import 'package:crypto_bloc/crypto_repository.dart';
+import 'package:crypto_bloc/models/crypto_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:crypto_bloc/bloc/crypto_event.dart';
@@ -25,8 +26,25 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
       final gainers = state.cryptoList.where(
         (item) => double.parse(item.percentChange24h) > 0,
       );
-
       emit(state.copyWith(cryptoList: gainers.toList()));
+    });
+
+    on<FilterDrop>((event, emit) {
+      final drop = state.cryptoList.where(
+        (item) => double.parse(item.percentChange24h) < 0,
+      );
+      emit(state.copyWith(cryptoList: drop.toList()));
+    });
+
+    on<Top10>((event, emit) {
+      final top10 = List<CryptoModel>.from(state.cryptoList)
+        ..sort(
+          (firstPrice, secondPrice) =>
+              (double.tryParse(secondPrice.priceUsd) ?? 0).compareTo(
+                double.tryParse(firstPrice.priceUsd) ?? 0,
+              ),
+        );
+      emit(state.copyWith(cryptoList: top10.take(10).toList()));
     });
 
     on<ResetFilter>((event, emit) {
