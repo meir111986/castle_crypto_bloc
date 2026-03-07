@@ -4,6 +4,7 @@ import 'package:crypto_bloc/bloc/crypto_event.dart';
 import 'package:crypto_bloc/bloc/crypto_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_ce/hive.dart';
 
 class CryptoPage extends StatelessWidget {
   const CryptoPage({super.key});
@@ -11,7 +12,18 @@ class CryptoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text('Crypto App'), actions: []),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Crypto App'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<CryptoBloc>().add(ClearCache());
+            },
+            icon: Icon(Icons.delete_outline),
+          ),
+        ],
+      ),
       // body: BlocConsumer<CryptoCubit, CryptoState>(
       body: BlocConsumer<CryptoBloc, CryptoState>(
         listener: (context, state) {
@@ -22,11 +34,18 @@ class CryptoPage extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if (state.isLoading) {
+          final lastUpdate = Hive.box(
+            'settingsBox',
+          ).get('last_update', defaultValue: 'Никогда не обновлялось');
+
+          if (state.isLoading && state.cryptoList.isEmpty) {
             return Center(child: CircularProgressIndicator());
           }
+
           return Column(
             children: [
+              if (state.isLoading && state.cryptoList.isNotEmpty)
+                LinearProgressIndicator(),
               SizedBox(height: 20),
               Wrap(
                 spacing: 8,
@@ -57,6 +76,8 @@ class CryptoPage extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 20),
+              Text('Последнее обновление: $lastUpdate'),
               SizedBox(height: 20),
               Expanded(
                 child: ListView.builder(

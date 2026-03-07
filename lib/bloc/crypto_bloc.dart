@@ -10,11 +10,20 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
 
   CryptoBloc(this.cryptoRepository) : super(const CryptoState()) {
     on<loadCryptoData>((event, emit) async {
-      emit(state.copyWith(isLoading: true, error: null));
+      final localData = cryptoRepository.getLocalCryptoData();
+
+      if (localData.isEmpty) {
+        emit(
+          state.copyWith(cryptoList: localData, isLoading: true, error: null),
+        );
+      } else {
+        emit(state.copyWith(isLoading: true, error: null));
+      }
+
+      await Future.delayed(Duration(seconds: 5));
 
       try {
         final data = await cryptoRepository.fetchCryptoData();
-
         emit(state.copyWith(cryptoList: data, isLoading: false));
       } catch (e) {
         print('object $e');
@@ -49,6 +58,11 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
 
     on<ResetFilter>((event, emit) {
       add(loadCryptoData());
+    });
+
+    on<ClearCache>((event, emit) async {
+      await cryptoRepository.clearCache();
+      emit(state.copyWith(cryptoList: []));
     });
   }
 }
