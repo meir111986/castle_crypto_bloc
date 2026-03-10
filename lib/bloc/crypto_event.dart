@@ -19,7 +19,4 @@ class ToggleFavorite extends CryptoEvent {
 
 class FilterFavorites extends CryptoEvent {}
 
-// class ClearToggleFavorite extends CryptoEvent {
-//   final String id;
-//   ClearToggleFavorite(this.id);
-// }
+class ClearAllToggleFavorite extends CryptoEvent {}

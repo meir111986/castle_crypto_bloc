@@ -27,11 +27,9 @@ class CryptoRepository {
     }
   }
 
-  // void clearToggleFavorite(String id) {
-  //   if (_favoritesBox.containsKey(id)) {
-  //     _favoritesBox.delete(id);
-  //   }
-  // }
+  void clearAllToggleFavorite() {
+    _favoritesBox.clear();
+  }
 
   Future<List<CryptoModel>> fetchCryptoData() async {
     // await Future.delayed(Duration(seconds: 5));
