@@ -88,7 +88,7 @@ class CryptoBloc extends Bloc<CryptoEvent, CryptoState> {
       emit(state.copyWith(favoritesIds: currentFavorites));
     });
 
-    on<ClearAllToggleFavorite>((event, emit) {
+    on<ClearAllFavorites>((event, emit) {
       cryptoRepository.clearAllToggleFavorite();
       emit(state.copyWith(favoritesIds: {}));
     });

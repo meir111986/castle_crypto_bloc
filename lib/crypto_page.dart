@@ -85,7 +85,7 @@ class CryptoPage extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<CryptoBloc>().add(ClearAllToggleFavorite());
+                      context.read<CryptoBloc>().add(ClearAllFavorites());
                     },
                     child: Text('Очистить Избранные'),
                   ),
